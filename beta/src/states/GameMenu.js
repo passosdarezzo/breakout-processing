@@ -44,9 +44,6 @@ ColorMemory.GameMenu.prototype = {
 	    });
 		start.events.onInputUp.add(function(){
 			game.state.start('Game');
-			console.log('Iniciado!');
-			console.log('Sound? ' + ColorMemory.gameOptions.playSound);
-			console.log('Life: ' + ColorMemory.life);
 		});
 		/* Get the element that triggered a specific event: target */
 		start.events.onInputOver.add(function(target){
