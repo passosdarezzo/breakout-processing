@@ -1,47 +1,39 @@
-BetaAsteroid.Splash = function(game){};
+ColorMemory.Splash = function(game){};
 
-BetaAsteroid.Splash.prototype = {
+ColorMemory.Splash.prototype = {
 
 	loadScripts: function(){
-		this.load.script('style', 'lib/style.js');
-		this.load.script('mixins', 'lib/mixins.js');
-		this.load.script('Count', 'lib/Counter.js');
-		this.load.script('WebFont', 'vendor/webfontloader.js');
-		this.load.script('Modal', 'vendor/modal.js');
 		this.load.script('GameMenu', 'src/states/GameMenu.js');
 		this.load.script('Game', 'src/states/Game.js');
-		this.load.script('GameOver', 'src/states/GameOver.js');
-		this.load.script('Credits', 'src/states/Credits.js');
-		this.load.script('Options', 'src/states/Options.js');
-		this.load.script('LifeBar', 'src/states/LifeBar.js');
+		/*this.load.script('GameOver', 'src/states/GameOver.js');*/
 	},
 
 	loadBgm: function(){
-		// thanks Kevin Macleod at http://incompetech.com/
-		this.load.audio('dangerous', 'assets/bgm/Dangerous.mp3');
-		this.load.audio('exit', 'assets/bgm/Exit the Premises.mp3');
 	},
 
 	loadImages: function(){
-		this.load.image('gun', 'asset/images/gun.png');
-		this.load.image('base-gun', 'asset/images/base-gun.png');
-		this.load.image('bullet', 'asset/images/bullet.png');
-		this.load.image('menu-bg', 'asset/images/menu-bg.png');
-		this.load.image('options-bg', 'asset/images/options-bg.jpg');
-		this.load.image('level-1-bg', 'asset/images/level-1-bg.png');
-		this.load.image('moon', 'asset/images/moon.png');
+		this.load.image('blue-on', 'asset/images/blue-tile-on.png');
+		this.load.image('blue-off', 'asset/images/blue-tile-off.png');
+		this.load.image('red-on', 'asset/images/red-tile-on.png');
+		this.load.image('red-off', 'asset/images/red-tile-off.png');
+		this.load.image('green-on', 'asset/images/green-tile-on.png');
+		this.load.image('green-off', 'asset/images/green-tile-off.png');
+		this.load.image('orange-on', 'asset/images/orange-tile-on.png');
+		this.load.image('orange-off', 'asset/images/orange-tile-off.png');
+
+		this.load.image('menu-bg', 'asset/images/menu-bg-.png');
+		this.load.image('sound-on', 'asset/images/sound-on.png');
+		this.load.image('sound-off', 'asset/images/sound-off.png');
+		/*this.load.image('options-bg', 'asset/images/options-bg.jpg');
+		this.load.image('level-1-bg', 'asset/images/level-1-bg.png');*/
 		this.load.image('play', 'asset/images/play.png');
 		this.load.image('pause', 'asset/images/pause.png');
-		this.load.image("mouseLeft", "asset/images/mouse-left.png");
-		this.load.image("star", "asset/images/star.png");
+		/*this.load.image("mouseLeft", "asset/images/mouse-left.png");
 		this.load.image("modalBG","asset/images/modalBG.png");
-		this.load.image('lifeBar', 'asset/images/life-bar.png');
 		this.load.image('yes', 'asset/images/yes.png');
 		this.load.image('no', 'asset/images/no.png');
 		this.load.image('tryagain', 'asset/images/tryagain.png');
-		this.load.image('gameover', 'asset/images/gameover.png');
-
-		this.load.atlasJSONHash('shootAsteroid', 'asset/images/shoot_asteroid.png', 'asset/images/shoot_asteroid.json');
+		this.load.image('gameover', 'asset/images/gameover.png');*/
 	},
 
 	loadFonts: function(){
@@ -56,15 +48,14 @@ BetaAsteroid.Splash.prototype = {
 	},
 
 	addGameStates: function(){
-		this.state.add('Options', Options);
-		this.state.add('GameMenu', BetaAsteroid.GameMenu);
-		this.state.add('Game', BetaAsteroid.Game);
-		this.state.add('GameOver', GameOver);
+		this.state.add('GameMenu', ColorMemory.GameMenu);
+		this.state.add('Game', ColorMemory.Game);
+		/*this.state.add('GameOver', ColorMemory.GameOver);*/
 	},
 
 	addGameMusic: function(){
-		musicPlayer = this.add.audio('dangerous');
-		musicPlayer.loop = true;
+		/*musicPlayer = this.add.audio('dangerous');
+		musicPlayer.loop = true;*/
 	},
 
 	// *******************************************************
@@ -83,7 +74,7 @@ BetaAsteroid.Splash.prototype = {
 		this.logo.scale.setTo(0, 200);
 		
 		// Texto em cima da barra de rolagem
-		this.status = this.make.text(this.world.centerX, 360, 'LOADING', {fill: 'white'});
+		this.status = this.make.text(this.world.centerX, 360, '0x01DABBAD3', {fill: 'white'});
 		this.status.anchor.setTo(0.5);
 
 		// define o centro do objeto como ancora

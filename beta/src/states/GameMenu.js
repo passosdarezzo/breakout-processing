@@ -1,6 +1,6 @@
-BetaAsteroid.GameMenu = function(game){};
+ColorMemory.GameMenu = function(game){};
 
-BetaAsteroid.GameMenu.prototype = {
+ColorMemory.GameMenu.prototype = {
 	menuConfig:{
 		className: "inverse",
 		startY: 260,
@@ -8,44 +8,65 @@ BetaAsteroid.GameMenu.prototype = {
 	},
 
 	init: function(){
-		this.titleText = this.game.make.text(this.game.world.centerX, 100, "Defenda a Lua", {
+		/*this.titleText = this.game.make.text(this.game.world.centerX, 100, "cRiStiano", {
 			font: 'bold 60pt TheMinion',
 			fill: '#FDFFB5',
 			align: 'center'
-		});
+		});*/
+		this.titleText = game.make.text(10, 100, 'CrIstiAno');
 		this.titleText.setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
-		this.titleText.anchor.set(0.5);
+		this.titleText.anchor.set(0,0);
 		this.optionCount = 1;
 	},
 
 	create: function(){
-		this.game.add.sprite(0, 0, 'menu-bg');
-
-		// Tocar música
-		musicPlayer.play();
-
 		// Adicionar background
-		this.game.stage.disableVisibilityChange = true;
-		this.game.add.existing(this.titleText);
+		game.add.sprite(0, 0, 'menu-bg');
+		game.stage.disableVisibilityChange = true;
+		game.add.existing(this.titleText);
 
-		this.addMenuOption('START', function(){
-			musicPlayer.stop();
-			this.game.state.start('Game');
-		});
-/*
-		this.addMenuOption('Opções', function(){
-			this.game.state.start('Options');
+		// Sound
+		var sound = game.add.sprite(300, 50, ColorMemory.gameOptions.playSound ? 'sound-on' : 'sound-off');
+		sound.inputEnabled = true;
+		sound.events.onInputUp.add(function(){
+			ColorMemory.gameOptions.playSound = !ColorMemory.gameOptions.playSound;
+			sound.loadTexture(ColorMemory.gameOptions.playSound ? 'sound-on' : 'sound-off');
+			console.log('Sound:' + ColorMemory.gameOptions.playSound);
 		});
 
-		this.addMenuOption('Autor', function(){
-			this.game.state.start('Credits');
+		// Start
+		var start = game.add.text(30, 300, '1_CRIS_START');
+		start.anchor.set(0,0);
+		start.inputEnabled = true;
+		start.setStyle({
+	    	fill: 'white',
+	        stroke: 'rgba(200,200,200,0.5)'
+	    });
+		start.events.onInputUp.add(function(){
+			game.state.start('Game');
+			console.log('Iniciado!');
+			console.log('Sound? ' + ColorMemory.gameOptions.playSound);
+			console.log('Life: ' + ColorMemory.life);
 		});
-		*/
+		/* Get the element that triggered a specific event: target */
+		start.events.onInputOver.add(function(target){
+			console.log('Input Over');
+			target.setStyle({
+		    	fill: '#FEFFD5',
+		        stroke: 'rgba(200,200,200,0.5)'
+		    });
+		});
+		start.events.onInputOut.add(function(target){
+			console.log('Input Out');
+			target.setStyle({
+		    	fill: 'white',
+		        stroke: 'rgba(200,200,200,0.5)'
+		    });
+		});
+
 	}, 
 
 	update: function(){
 
 	}
 };
-
-Phaser.Utils.mixinPrototype(BetaAsteroid.GameMenu.prototype, mixins);

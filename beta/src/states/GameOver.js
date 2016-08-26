@@ -1,6 +1,6 @@
-var GameOver = GameOver || function(){};
+ColorMemory.GameOver = function(game){};
 
-GameOver.prototype = {
+ColorMemory.GameOver.prototype = {
 	init: function(){
 		console.log('GameOver.js - init()');
 	}
