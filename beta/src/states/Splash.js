@@ -24,12 +24,14 @@ ColorMemory.Splash.prototype = {
 		this.load.image('menu-bg', 'asset/images/menu-bg-.png');
 		this.load.image('sound-on', 'asset/images/sound-on.png');
 		this.load.image('sound-off', 'asset/images/sound-off.png');
+		this.load.image("modalBG","asset/images/modalBG.png");
+		this.load.image("reload","asset/images/reload.png");
 		/*this.load.image('options-bg', 'asset/images/options-bg.jpg');
 		this.load.image('level-1-bg', 'asset/images/level-1-bg.png');*/
 		this.load.image('play', 'asset/images/play.png');
 		this.load.image('pause', 'asset/images/pause.png');
 		/*this.load.image("mouseLeft", "asset/images/mouse-left.png");
-		this.load.image("modalBG","asset/images/modalBG.png");
+
 		this.load.image('yes', 'asset/images/yes.png');
 		this.load.image('no', 'asset/images/no.png');
 		this.load.image('tryagain', 'asset/images/tryagain.png');
@@ -43,7 +45,7 @@ ColorMemory.Splash.prototype = {
 				urls: ['asset/style/theminion.css']
 			}
 		};
-		
+
 		this.load.atlasJSONArray('numbers', 'asset/images/numbers.png', 'asset/images/numbers.json');
 	},
 
@@ -59,7 +61,7 @@ ColorMemory.Splash.prototype = {
 	},
 
 	// *******************************************************
-	// MAIN LOOP 
+	// MAIN LOOP
 	// *******************************************************
 	init: function(){
 		// Background
@@ -68,11 +70,11 @@ ColorMemory.Splash.prototype = {
 		// Barra de progresso
 		this.loadingBar = this.make.sprite(this.world.centerX, 400, 'loading');
 		this.loadingBar.anchor.setTo(0);
-		
+
 		// Logo
 		this.logo = this.make.sprite(this.world.centerX, 200, 'brand');
 		this.logo.scale.setTo(0, 200);
-		
+
 		// Texto em cima da barra de rolagem
 		this.status = this.make.text(this.world.centerX, 360, '0x01DABBAD3', {fill: 'white'});
 		this.status.anchor.setTo(0.5);
