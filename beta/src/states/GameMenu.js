@@ -13,7 +13,7 @@ ColorMemory.GameMenu.prototype = {
 			fill: '#FDFFB5',
 			align: 'center'
 		});*/
-		this.titleText = game.make.text(10, 100, 'CrIstiAno');
+		this.titleText = game.make.text(10, 100, 'Color Memory');
 		this.titleText.setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
 		this.titleText.anchor.set(0,0);
 		this.optionCount = 1;
@@ -35,7 +35,7 @@ ColorMemory.GameMenu.prototype = {
 		});
 
 		// Start
-		var start = game.add.text(30, 300, '1_CRIS_START');
+		var start = game.add.text(30, 300, 'START');
 		start.anchor.set(0,0);
 		start.inputEnabled = true;
 		start.setStyle({
@@ -61,7 +61,7 @@ ColorMemory.GameMenu.prototype = {
 		    });
 		});
 
-	}, 
+	},
 
 	update: function(){
 

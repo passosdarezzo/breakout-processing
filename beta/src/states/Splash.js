@@ -9,6 +9,10 @@ ColorMemory.Splash.prototype = {
 	},
 
 	loadBgm: function(){
+		game.load.audio('blue-note', 'asset/bgm/blue-note.mp3');
+		game.load.audio('green-note', 'asset/bgm/green-note.mp3');
+		game.load.audio('red-note', 'asset/bgm/red-note.mp3');
+		game.load.audio('orange-note', 'asset/bgm/orange-note.mp3');
 	},
 
 	loadImages: function(){
@@ -21,21 +25,12 @@ ColorMemory.Splash.prototype = {
 		this.load.image('orange-on', 'asset/images/orange-tile-on.png');
 		this.load.image('orange-off', 'asset/images/orange-tile-off.png');
 
-		this.load.image('menu-bg', 'asset/images/menu-bg-.png');
 		this.load.image('sound-on', 'asset/images/sound-on.png');
 		this.load.image('sound-off', 'asset/images/sound-off.png');
 		this.load.image("modalBG","asset/images/modalBG.png");
-		this.load.image("reload","asset/images/reload.png");
-		/*this.load.image('options-bg', 'asset/images/options-bg.jpg');
-		this.load.image('level-1-bg', 'asset/images/level-1-bg.png');*/
-		this.load.image('play', 'asset/images/play.png');
-		this.load.image('pause', 'asset/images/pause.png');
-		/*this.load.image("mouseLeft", "asset/images/mouse-left.png");
-
-		this.load.image('yes', 'asset/images/yes.png');
-		this.load.image('no', 'asset/images/no.png');
-		this.load.image('tryagain', 'asset/images/tryagain.png');
-		this.load.image('gameover', 'asset/images/gameover.png');*/
+		this.load.image("play","asset/images/play.png");
+		this.load.image('level-1-bg', 'asset/images/level-1-bg.png');
+		this.load.image("mouseLeft", "asset/images/mouse-left.png");
 	},
 
 	loadFonts: function(){
@@ -76,7 +71,7 @@ ColorMemory.Splash.prototype = {
 		this.logo.scale.setTo(0, 200);
 
 		// Texto em cima da barra de rolagem
-		this.status = this.make.text(this.world.centerX, 360, '0x01DABBAD3', {fill: 'white'});
+		this.status = this.make.text(this.world.centerX, 360, 'Loading', {fill: 'white'});
 		this.status.anchor.setTo(0.5);
 
 		// define o centro do objeto como ancora
@@ -119,7 +114,7 @@ ColorMemory.Splash.prototype = {
 
 		// Aguarda 1s e inicia o menu
 		setTimeout(function(){
-			this.game.state.start('GameMenu');
+			this.game.state.start('Game');
 		}, 1500);
 	}
 };

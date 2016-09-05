@@ -4,7 +4,7 @@
 var ColorMemory = {
 	/* Here we've just got some global level vars that persist regardless of State swaps */
 	score: 0,
-	
+
 	/* Quantidade de vida do personagem */
 	life: 10,
 
@@ -24,8 +24,8 @@ ColorMemory.Main.prototype = {
 
 	preload: function(){
 		// IMAGES
-		this.load.image('loading', 'asset/images/loading_c.png');
-		this.load.image('brand', 'asset/images/çlkjçlk.jpeg');
+		this.load.image('loading', 'asset/images/loading.png');
+		this.load.image('brand', 'asset/images/logo.png');
 		this.load.image('splash-bg', 'asset/images/splash-bg.jpg');
 
 		// SCRIPTS
@@ -41,7 +41,7 @@ ColorMemory.Main.prototype = {
 };
 
 // *******************************************************
-// START 
+// START
 // *******************************************************
 var game = new Phaser.Game(384, 480, Phaser.AUTO, 'game');
 game.state.add('Main', ColorMemory.Main);
