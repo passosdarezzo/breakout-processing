@@ -4,6 +4,7 @@ ColorMemory.Game = function(game){
   this.userTurn = false;
   this.level_1 = 1;
   this.score = 0;
+  this.scoreBoard = null;
   this.sPat = '';
   this.uPat = '';
   this.btnGreen = null;
@@ -37,6 +38,7 @@ ColorMemory.Game.prototype = {
     this.btnBlue.events.onInputUp.add(function(){
       ref.playBlue();
       ref.uPat += 'B';
+      ref.score++;
     });
 
     this.btnGreen = game.add.sprite(200, 150, 'green-off');
@@ -44,6 +46,7 @@ ColorMemory.Game.prototype = {
     this.btnGreen.events.onInputUp.add(function(){
       ref.playGreen();
       ref.uPat += 'G';
+      ref.score++;
     });
 
     this.btnRed = game.add.sprite(50, 280, 'red-off');
@@ -51,6 +54,7 @@ ColorMemory.Game.prototype = {
     this.btnRed.events.onInputUp.add(function(){
       ref.playRed();
       ref.uPat += 'R';
+      ref.score++;
     });
 
 
@@ -59,6 +63,7 @@ ColorMemory.Game.prototype = {
     this.btnOrange.events.onInputUp.add(function(){
       ref.playOrange();
       ref.uPat += 'O';
+      ref.score++;
     });
   },
 
@@ -245,10 +250,12 @@ ColorMemory.Game.prototype = {
       // Grupo de botões
       this.ButtonGroup = game.add.group();
 
-      this.myText = game.add.text(game.world.centerX, 450, "", { font: "bold 32px Arial", fill: "#fff"});
+      this.myText = game.add.text(game.world.centerX, 40, "", { font: "bold 32px Arial", fill: "#fff"});
       this.myText.anchor.setTo(0.5, 0.5);
       //  We'll set the bounds to be from x0, y100 and be 800px wide by 100px high
       //this.myText.setTextBounds(0, 100, 800, 100);
+
+      this.scoreBoard = game.add.text(20, 20, this.score, { font: "bold 32px Arial", fill: "#fff"});
 
       this.generateSounds();
       this.generateButtons();
@@ -256,10 +263,12 @@ ColorMemory.Game.prototype = {
   },
 
   update: function(){
+    this.scoreBoard.setText(this.score);
+
     if(this.isRunning){
       if(this.userTurn){
 
-        this.myText.setText('CrisTiano');
+        this.myText.setText('Cristiano');
 
         var a = this.uPat;
         var b = this.sPat.substring(0, this.uPat.length);
