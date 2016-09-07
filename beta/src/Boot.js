@@ -35,6 +35,13 @@ ColorMemory.Main.prototype = {
 	},
 
 	create: function(){
+		/*this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+		this.scale.minWidth = 320;
+		this.scale.minHeight = 480;
+		this.scale.maxWidth = 768;
+		this.scale.maxHeight = 1152;
+		game.scale.refresh();*/
+
 		this.state.add('Splash', ColorMemory.Splash);
 		this.state.start('Splash');
 	}
@@ -43,7 +50,7 @@ ColorMemory.Main.prototype = {
 // *******************************************************
 // START
 // *******************************************************
-var game = new Phaser.Game(384, 480, Phaser.AUTO, 'game');
+var game = new Phaser.Game(384, 539, Phaser.AUTO, 'game');
 game.state.add('Main', ColorMemory.Main);
 game.state.start('Main');
 

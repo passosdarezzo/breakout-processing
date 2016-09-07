@@ -5,7 +5,7 @@ ColorMemory.Splash.prototype = {
 	loadScripts: function(){
 		this.load.script('GameMenu', 'src/states/GameMenu.js');
 		this.load.script('Game', 'src/states/Game.js');
-		/*this.load.script('GameOver', 'src/states/GameOver.js');*/
+		this.load.script('Count', 'lib/Counter.js');
 	},
 
 	loadBgm: function(){
@@ -13,6 +13,8 @@ ColorMemory.Splash.prototype = {
 		game.load.audio('green-note', 'asset/bgm/green-note.mp3');
 		game.load.audio('red-note', 'asset/bgm/red-note.mp3');
 		game.load.audio('orange-note', 'asset/bgm/orange-note.mp3');
+		game.load.audio('success', 'asset/bgm/success.mp3');
+		game.load.audio('game-over', 'asset/bgm/game-over.mp3');
 	},
 
 	loadImages: function(){
@@ -30,7 +32,6 @@ ColorMemory.Splash.prototype = {
 		this.load.image("modalBG","asset/images/modalBG.png");
 		this.load.image("play","asset/images/play.png");
 		this.load.image('level-1-bg', 'asset/images/level-1-bg.png');
-		this.load.image("mouseLeft", "asset/images/mouse-left.png");
 	},
 
 	loadFonts: function(){
@@ -93,28 +94,13 @@ ColorMemory.Splash.prototype = {
 	},
 
 	create: function(){
-		if(!game.device.desktop){
-			game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
-			document.body.style.backgroundColor = '#3498db';
-
-			game.scale.minWidth = 250;
-			game.scale.minHeight = 170;
-			game.scale.maxWidth = 384;
-			game.scale.maxHeight = 480;
-
-			game.scale.pageAlignHorizontally = true;
-			game.scale.pageAlignVertically = true;
-
-			game.scale.setScreenSize(true)
-
-		}
 		this.addGameStates();
 		this.addGameMusic();
 
 		// Aguarda 1s e inicia o menu
-		setTimeout(function(){
+		//setTimeout(function(){
 			this.game.state.start('Game');
-		}, 1500);
+		//}, 1500);
 	}
 };

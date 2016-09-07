@@ -17,6 +17,8 @@ ColorMemory.Game = function(game){
   this.blueNote = null;
   this.indice = 0;
   this.myText = "";
+  this.successNote = null;
+  this.gameOverNote = null;
 };
 
 ColorMemory.Game.prototype = {
@@ -27,13 +29,15 @@ ColorMemory.Game.prototype = {
     this.redNote = game.add.audio('red-note');
     this.orangeNote = game.add.audio('orange-note');
     this.blueNote = game.add.audio('blue-note');
+    this.successNote = game.add.audio('success');
+    this.gameOverNote = game.add.audio('game-over');
   },
 
   generateButtons: function(){
     console.log('DEBUG - generateButtons');
     var ref = this;
 
-    this.btnBlue = game.add.sprite(50, 150, 'blue-off');
+    this.btnBlue = game.add.sprite(40, 100, 'blue-off');
     this.btnBlue.inputEnabled = true;
     this.btnBlue.events.onInputUp.add(function(){
       ref.playBlue();
@@ -41,7 +45,7 @@ ColorMemory.Game.prototype = {
       ref.score++;
     });
 
-    this.btnGreen = game.add.sprite(200, 150, 'green-off');
+    this.btnGreen = game.add.sprite(200, 100, 'green-off');
     this.btnGreen.inputEnabled = true;
     this.btnGreen.events.onInputUp.add(function(){
       ref.playGreen();
@@ -49,7 +53,7 @@ ColorMemory.Game.prototype = {
       ref.score++;
     });
 
-    this.btnRed = game.add.sprite(50, 280, 'red-off');
+    this.btnRed = game.add.sprite(40, 290, 'red-off');
     this.btnRed.inputEnabled = true;
     this.btnRed.events.onInputUp.add(function(){
       ref.playRed();
@@ -58,7 +62,7 @@ ColorMemory.Game.prototype = {
     });
 
 
-    this.btnOrange = game.add.sprite(200, 280, 'orange-off');
+    this.btnOrange = game.add.sprite(200, 290, 'orange-off');
     this.btnOrange.inputEnabled = true;
     this.btnOrange.events.onInputUp.add(function(){
       ref.playOrange();
@@ -111,7 +115,7 @@ ColorMemory.Game.prototype = {
     //timer = game.time.create(true);
     //timer.add(Phaser.Timer.SECOND, this.playPattern, this);
     //timer.start();
-    this.timer = game.time.events.loop(Phaser.Timer.SECOND * 0.8, this.__playPattern, this);
+    this.timer = game.time.events.loop(Phaser.Timer.SECOND * 0.6, this.__playPattern, this);
   },
   __playPattern: function(){
     console.log('DEBUG - playPattern');
@@ -178,10 +182,15 @@ ColorMemory.Game.prototype = {
 
   gameOver: function(){
     console.log('DEBUG - gameOver');
+
+    if(ColorMemory.gameOptions.playSound){
+      this.gameOverNote.play();
+    }
     this.btnGreen.destroy();
     this.btnBlue.destroy();
     this.btnRed.destroy();
     this.btnOrange.destroy();
+    this.myText.destroy();
     this.isRunning = false;
     this.game.time.events.stop();
     this.showScoreWin();
@@ -195,12 +204,10 @@ ColorMemory.Game.prototype = {
   },
 
   showScoreWin: function(){
-    this.gameOverLabel = game.add.text(game.world.centerX , 250, this.messageGameOver, {font : '30px Arial', fill: '#000000'});
-    this.gameOverLabel.anchor.setTo(0.5, 0.5);
 
     //this.lifeFinalScore = game.add.text(300,220,'Cat Life: ', {font : '18px Arial', fill: '#ffffff'});
     //this.finalScore = game.add.text(300,180,'Balloons: ', {font : '18px Arial', fill: '#ffffff'})
-    this.bgScore = game.add.sprite(game.world.centerX , 300, "modalBG");
+    this.bgScore = game.add.sprite(game.world.centerX , 250, "modalBG");
     this.bgScore.anchor.setTo(0.5, 0.5);
 
     this.scoreBoardGroup.add(this.bgScore);
@@ -208,7 +215,7 @@ ColorMemory.Game.prototype = {
     //this.scoreBoardGroup.scale.setTo(1, 1);
     game.world.bringToTop(this.scoreBoardGroup);
 
-    this.buttonReload = game.add.sprite(game.world.centerX, 320, "play");
+    this.buttonReload = game.add.sprite(game.world.centerX, 430, "play");
     this.scoreBoardGroup.add(this.buttonReload);
     this.buttonReload.anchor.setTo(0.5, 0.5);
     this.buttonReload.inputEnabled = true;
@@ -219,7 +226,6 @@ ColorMemory.Game.prototype = {
     //game.world.bringToTop(this.finalScore);
     //game.world.bringToTop(this.lifeFinalScore);
 
-    this.scoreBoardGroup.add(this.gameOverLabel);
     game.add.tween(this.scoreBoardGroup).from( { y: -200 }, 2000, Phaser.Easing.Bounce.Out, true);
   },
 
@@ -231,7 +237,7 @@ ColorMemory.Game.prototype = {
     this.starfield = this.game.add.tileSprite(0, 0, 800, 600, 'level-1-bg');
 
     // Sound
-    var btnSound = game.add.sprite(300, 10, ColorMemory.gameOptions.playSound ? 'sound-on' : 'sound-off');
+    var btnSound = game.add.sprite(280, 20, ColorMemory.gameOptions.playSound ? 'sound-on' : 'sound-off');
     btnSound.inputEnabled = true;
     btnSound.events.onInputUp.add(function(){
       ColorMemory.gameOptions.playSound = !ColorMemory.gameOptions.playSound;
@@ -239,23 +245,21 @@ ColorMemory.Game.prototype = {
       console.log('Sound:' + ColorMemory.gameOptions.playSound);
     });
 
-      // Simulate a pointer click/tap input at the center of the stage
-      // when the example begins running.
-      //this.game.input.activePointer.x = this.game.width/2;
-      //this.game.input.activePointer.y = this.game.height/2;
-
       // Grupo de componentes da Janela Modal
       this.scoreBoardGroup = game.add.group();
 
       // Grupo de botões
       this.ButtonGroup = game.add.group();
 
-      this.myText = game.add.text(game.world.centerX, 40, "", { font: "bold 32px Arial", fill: "#fff"});
+      this.myText = game.add.text(game.world.centerX, game.world.centerY, "", { font: "bold 32px Arial", fill: "#fff"});
       this.myText.anchor.setTo(0.5, 0.5);
-      //  We'll set the bounds to be from x0, y100 and be 800px wide by 100px high
-      //this.myText.setTextBounds(0, 100, 800, 100);
 
-      this.scoreBoard = game.add.text(20, 20, this.score, { font: "bold 32px Arial", fill: "#fff"});
+      // PONTUAÇÃO
+      this.scoreBoard = new Counter(this.game, 0, 0);
+      game.add.existing(this.scoreBoard);
+      this.scoreBoard.x = 50;
+      this.scoreBoard.y = 20;
+      this.scoreBoard.setScore(this.score, false);
 
       this.generateSounds();
       this.generateButtons();
@@ -263,12 +267,13 @@ ColorMemory.Game.prototype = {
   },
 
   update: function(){
-    this.scoreBoard.setText(this.score);
+    //this.scoreBoard.setText(this.score);
+    this.scoreBoard.setScore(this.score, false);
 
     if(this.isRunning){
       if(this.userTurn){
 
-        this.myText.setText('Cristiano');
+        this.myText.setText('');
 
         var a = this.uPat;
         var b = this.sPat.substring(0, this.uPat.length);
@@ -277,16 +282,18 @@ ColorMemory.Game.prototype = {
         //console.log('padrao Sistema: ' + this.sPat);
 
         if(a.localeCompare(b) != 0){
-          this.messageGameOver = 'Game Over';
           this.gameOver();
         } else if (this.uPat.length == this.sPat.length) {
           console.log('DEBUG - ADICIONA PATTERN');
+          if(ColorMemory.gameOptions.playSound){
+            this.successNote.play();  
+          }
+          
           this.increaseLevel();
         }
       } else {
-        this.myText.setText('Computador');
+        this.myText.setText('Computer');
       }
     }
   }
-
 };
