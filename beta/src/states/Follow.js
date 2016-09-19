@@ -1,8 +1,7 @@
-ColorMemory.Game = function(game){
+ColorMemory.Follow = function(game){
   // Define constants
   this.isRunning = false;
   this.userTurn = false;
-  this.level_1 = 1;
   this.score = 0;
   this.scoreBoard = null;
   this.sPat = '';
@@ -17,11 +16,13 @@ ColorMemory.Game = function(game){
   this.blueNote = null;
   this.indice = 0;
   this.myText = "";
+  this.myTextBkg = null;
   this.successNote = null;
   this.gameOverNote = null;
+  this.life = 3;
 };
 
-ColorMemory.Game.prototype = {
+ColorMemory.Follow.prototype = {
   timer:null,
   
   isUserTurn: function(option){
@@ -43,10 +44,9 @@ ColorMemory.Game.prototype = {
   },
 
   generateButtons: function(){
-    console.log('DEBUG - generateButtons');
     var ref = this;
 
-    this.btnBlue = game.add.sprite(40, 100, 'blue-off');
+    this.btnBlue = game.add.sprite(20, 120, 'blue-off');
     this.btnBlue.inputEnabled = true;
     this.btnBlue.events.onInputUp.add(function(){
       ref.playBlue();
@@ -55,7 +55,7 @@ ColorMemory.Game.prototype = {
 	  ref.scoreBoard.setScore(ref.score, true);
     });
 
-    this.btnGreen = game.add.sprite(200, 100, 'green-off');
+    this.btnGreen = game.add.sprite(game.world.width - 180, game.world.height - 250, 'green-off');
     this.btnGreen.inputEnabled = true;
     this.btnGreen.events.onInputUp.add(function(){
       ref.playGreen();
@@ -64,7 +64,7 @@ ColorMemory.Game.prototype = {
 	  ref.scoreBoard.setScore(ref.score, true);
     });
 
-    this.btnRed = game.add.sprite(40, 290, 'red-off');
+    this.btnRed = game.add.sprite(20, game.world.height - 250, 'red-off');
     this.btnRed.inputEnabled = true;
     this.btnRed.events.onInputUp.add(function(){
       ref.playRed();
@@ -73,8 +73,7 @@ ColorMemory.Game.prototype = {
 	  ref.scoreBoard.setScore(ref.score, true);
     });
 
-
-    this.btnOrange = game.add.sprite(200, 290, 'orange-off');
+    this.btnOrange = game.add.sprite(game.world.width - 180, 120, 'orange-off');
     this.btnOrange.inputEnabled = true;
     this.btnOrange.events.onInputUp.add(function(){
       ref.playOrange();
@@ -85,23 +84,15 @@ ColorMemory.Game.prototype = {
   },
 
   start: function(){
-    console.log('DEBUG - start');
-
+	this.isUserTurn(false);
     this.resetValues();
 	this.showReady();
-	// timer
-    this.increaseLevel();
+	
+	game.time.events.add(Phaser.Timer.SECOND * 2.5, this.increaseLevel, this);
 
-    //console.log('Game Running: ' + this.isRunning);
-    //console.log('Indice: ' + this.indice);
-    //console.log('Tamanho: ' + this.sPat.length);
-    //console.log('padrao Usuario: ' + this.uPat);
-    //console.log('padrao Sistema: ' + this.sPat);
   },
 
   resetValues: function(){
-    console.log('DEBUG - resetValues');
-
     this.uPat = '';
     this.sPat = '';
     this.timer = null;
@@ -112,14 +103,16 @@ ColorMemory.Game.prototype = {
   },
 
   increaseLevel: function(){
-    console.log('DEBUG - increaseLevel');
+	  console.log('Increase Level!!!');
+	this.drawText('Computer');
 
     var tons = ["G", "R", "O", "B"];
-    //for(var i = 0; i <= this.level_1; i++){
-      this.sPat += tons[Math.floor((Math.random() * 4))];
-    //};
-    console.log('Padrão Sistema: ' + this.sPat);
-    this.isUserTurn(false);
+	
+	for(var i = 0; i < ColorMemory.stages[ColorMemory.level].step; i++){
+		if(this.sPat.length<  ColorMemory.stages[ColorMemory.level].patSize)
+			this.sPat += tons[Math.floor((Math.random() * 4))];
+	}
+	
     this.uPat = '';
     this.indice = 0;
 
@@ -130,11 +123,10 @@ ColorMemory.Game.prototype = {
     //timer = game.time.create(true);
     //timer.add(Phaser.Timer.SECOND, this.playPattern, this);
     //timer.start();
+	this.ready.destroy();
     this.timer = game.time.events.loop(Phaser.Timer.SECOND * 0.6, this.__playPattern, this);
   },
   __playPattern: function(){
-    console.log('DEBUG - playPattern');
-
     switch(this.sPat.charAt(this.indice)){
       case "B":
         this.playBlue();
@@ -158,8 +150,6 @@ ColorMemory.Game.prototype = {
   },
 
   playGreen: function(){
-    //console.log('DEBUG - playGreen');
-
     if(ColorMemory.gameOptions.playSound){
       this.greenNote.play();  
     }
@@ -196,8 +186,6 @@ ColorMemory.Game.prototype = {
   },
 
   gameOver: function(){
-    console.log('DEBUG - gameOver');
-
     if(ColorMemory.gameOptions.playSound){
       this.gameOverNote.play();
     }
@@ -212,8 +200,6 @@ ColorMemory.Game.prototype = {
   },
 
   reStart: function(){
-    console.log('DEBUG - reStart');
-
     this.game.time.events.start();
     this.game.state.start(game.state.current);
   },
@@ -247,25 +233,71 @@ ColorMemory.Game.prototype = {
   showReady: function(){
 	    this.ready = game.add.sprite(game.world.centerX , game.world.centerY, "ready");
 		this.ready.anchor.setTo(0.5, 0.5);
+		// Reduz imagem para depois ampliar
+		this.ready.scale.set(0.1);
+		var ref = this;
+		var killTween = game.add.tween(this.ready.scale).to( { x: 1, y: 1 }, 3500, Phaser.Easing.Elastic.Out);
+		killTween.onComplete.addOnce(function(){
+			ref.ready.kill();
+		}, this);
+		killTween.start();
 		
-		game.add.tween(this.ready.scale).to( { x: 2, y: 2 }, 700, Phaser.Easing.Linear.None, true);
+		/*
+		1 - exemplo
+		var killTween = game.add.tween(brick.scale);
+		killTween.to({x:0,y:0}, 200, Phaser.Easing.Linear.None);
+		killTween.onComplete.addOnce(function(){
+			brick.kill();
+		}, this);
+		killTween.start();
+		
+		2 - exemplo
+		tween = game.add.tween(popup.scale).to( { x: 1, y: 1 }, 1000, Phaser.Easing.Elastic.Out, true);
+		*/
 
+  },
+  
+  showCongratz: function(){
+	  this.isUserTurn(false);
+	  
+	    this.ready = game.add.sprite(game.world.centerX , game.world.centerY, "congratz");
+		this.ready.anchor.setTo(0.5, 0.5);
+		// Reduz imagem para depois ampliar
+		this.ready.scale.set(0.1);
+		var ref = this;
+		var killTween = game.add.tween(this.ready.scale).to( { x: 1, y: 1 }, 1600, Phaser.Easing.Elastic.Out);
+		killTween.onComplete.addOnce(function(){
+			ref.ready.kill();
+		}, this);
+		killTween.start();
+
+		game.time.events.add(Phaser.Timer.SECOND * 1, this.increaseLevel, this);
+  },
+  
+  drawText: function(texto){
+	if(texto){
+		this.myText.setText(texto);
+		this.myTextBkg = game.add.graphics();
+		this.myTextBkg.beginFill(0x000000, 0.2);
+		this.myTextBkg.drawRect(0, game.world.centerY - 40, 800, 80);
+	} else {
+		this.myTextBkg.destroy();
+        this.myText.setText(texto);
+	}
   },
   
   /**************************************************************/
   /* MAIN LOOP  */
   /**************************************************************/
   create: function(){
-    console.log('DEBUG - create');
     this.starfield = this.game.add.tileSprite(0, 0, 800, 600, 'level-1-bg');
 
     // Sound
-    var btnSound = game.add.sprite(280, 20, ColorMemory.gameOptions.playSound ? 'sound-on' : 'sound-off');
+    var btnSound = game.add.sprite(game.world.width - 100, 20, ColorMemory.gameOptions.playSound ? 'sound-on' : 'sound-off');
     btnSound.inputEnabled = true;
     btnSound.events.onInputUp.add(function(){
       ColorMemory.gameOptions.playSound = !ColorMemory.gameOptions.playSound;
       btnSound.loadTexture(ColorMemory.gameOptions.playSound ? 'sound-on' : 'sound-off');
-      console.log('Sound:' + ColorMemory.gameOptions.playSound);
     });
 
       // Grupo de componentes da Janela Modal
@@ -274,16 +306,18 @@ ColorMemory.Game.prototype = {
       // Grupo de botões
       this.ButtonGroup = game.add.group();
 
-      this.myText = game.add.text(game.world.centerX, game.world.centerY, "", { font: "bold 32px Arial", fill: "#fff"});
+	  // Computer Text
+	  var styleText = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
+      this.myText = game.add.text(game.world.centerX, game.world.centerY, "", styleText);
       this.myText.anchor.setTo(0.5, 0.5);
 
       // PONTUAÇÃO
       this.scoreBoard = new Counter(this.game, 0, 0);
       game.add.existing(this.scoreBoard);
-      this.scoreBoard.x = 50;
+      this.scoreBoard.x = 60;
       this.scoreBoard.y = 20;
       this.scoreBoard.setScore(this.score, false);
-
+	  
       this.generateSounds();
       this.generateButtons();
       this.start();
@@ -295,27 +329,36 @@ ColorMemory.Game.prototype = {
 
     if(this.isRunning){
       if(this.userTurn){
-
-        this.myText.setText('');
+		this.drawText('');
 
         var a = this.uPat;
         var b = this.sPat.substring(0, this.uPat.length);
 
-        //console.log('padrao Usuario: ' + this.uPat);
-        //console.log('padrao Sistema: ' + this.sPat);
-
         if(a.localeCompare(b) != 0){
-          this.gameOver();
-        } else if (this.uPat.length == this.sPat.length) {
-          console.log('DEBUG - ADICIONA PATTERN');
+			if(this.life <= 0){
+				this.gameOver();
+			} else {
+				// Errou mas ainda tem vida
+				this.life -= 1;
+				this.uPat = this.uPat.substring(0, this.uPat.length - 1);
+				console.log('Life: ' + this.life);
+			}
+          
+        } else if (this.uPat.length == this.sPat.length && this.sPat.length != ColorMemory.patternSize) {
           if(ColorMemory.gameOptions.playSound){
             this.successNote.play();  
           }
           
-          this.increaseLevel();
+          this.showCongratz();
+        } else if (this.uPat.length == this.sPat.length && this.sPat.length == ColorMemory.patternSize) {
+          /*if(ColorMemory.gameOptions.playSound){
+            this.successNote.play();  
+          }
+          
+          this.showCongratz();*/
+		  
+		  console.log('Show Level Clear');
         }
-      } else {
-        this.myText.setText('Computer');
       }
     }
   }

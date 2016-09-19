@@ -4,7 +4,9 @@ ColorMemory.Splash.prototype = {
 
 	loadScripts: function(){
 		this.load.script('GameMenu', 'src/states/GameMenu.js');
-		this.load.script('Game', 'src/states/Game.js');
+		this.load.script('Follow', 'src/states/Follow.js');
+		this.load.script('Endless', 'src/states/Endless.js');
+		this.load.script('LevelSelect', 'src/states/LevelSelect.js');
 		this.load.script('Count', 'lib/Counter.js');
 	},
 
@@ -32,6 +34,11 @@ ColorMemory.Splash.prototype = {
 		this.load.image("modalBG","asset/images/modalBG.png");
 		this.load.image("play","asset/images/play.png");
 		this.load.image('level-1-bg', 'asset/images/level-1-bg.png');
+		this.load.image('ready', 'asset/images/ready.png');
+		this.load.image('congratz', 'asset/images/congratz.png');
+		
+		this.load.spritesheet("levels", "asset/images/levels.png", ColorMemory.thumbWidth, ColorMemory.thumbHeight);
+		this.load.spritesheet("level_arrows", "asset/images/level_arrows.png", 48, 48);
 	},
 
 	loadFonts: function(){
@@ -47,8 +54,9 @@ ColorMemory.Splash.prototype = {
 
 	addGameStates: function(){
 		this.state.add('GameMenu', ColorMemory.GameMenu);
-		this.state.add('Game', ColorMemory.Game);
-		/*this.state.add('GameOver', ColorMemory.GameOver);*/
+		this.state.add('Endless', ColorMemory.Endless);
+		this.state.add('LevelSelect', ColorMemory.LevelSelect);
+		this.state.add('Follow', ColorMemory.Follow);
 	},
 
 	addGameMusic: function(){
@@ -99,8 +107,10 @@ ColorMemory.Splash.prototype = {
 		this.addGameMusic();
 
 		// Aguarda 1s e inicia o menu
-		//setTimeout(function(){
-			this.game.state.start('Game');
-		//}, 1500);
+		setTimeout(function(){
+			//this.game.state.start('Game');
+			//this.game.state.start('LevelSelect');
+			this.game.state.start('GameMenu');
+		}, 1000);
 	}
 };
